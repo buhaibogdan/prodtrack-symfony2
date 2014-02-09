@@ -1,1 +1,2 @@
-Details soon...
+RESTful API with hypermedia.
+More details soon..
