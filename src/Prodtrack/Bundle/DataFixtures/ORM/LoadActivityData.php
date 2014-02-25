@@ -2,12 +2,13 @@
 
 namespace Prodtrack\Bundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Prodtrack\Bundle\Entity\Activity;
 
 
-class LoadActivityData implements FixtureInterface
+class LoadActivityData extends AbstractFixture implements OrderedFixtureInterface
 {
 
     /**
@@ -30,5 +31,10 @@ class LoadActivityData implements FixtureInterface
         $manager->persist($activity3);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 2;
     }
 }
