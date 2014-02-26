@@ -1,0 +1,3 @@
+o_auth_o_auth_homepage:
+    pattern:  /oauth/{name}
+    defaults: { _controller: OAuthOAuthBundle:Default:index }
