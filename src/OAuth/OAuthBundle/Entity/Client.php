@@ -5,7 +5,6 @@ namespace OAuth\OAuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-//TODO: index on client_id maybe
 /**
  * Class Client
  * @ORM\Entity(repositoryClass="OAuth\OAuthBundle\Repository\ClientRepository")
@@ -14,21 +13,25 @@ use Doctrine\ORM\Mapping as ORM;
 class Client
 {
     /**
-     * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=80)
+     * @ORM\Column(type="string", length=40, unique=true)
      */
     protected $client_id;
 
     /**
-     * @ORM\Column(type="string", length=80)
+     * @ORM\Column(type="string", length=80, unique=true)
      */
     protected $client_secret;
+
+    /**
+     * @ORM\Column(type="string", length=80, nullable=true, name="client_name")
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $user_id;
 
     /**
      * @ORM\Column(type="string", length=1000)
@@ -38,22 +41,13 @@ class Client
     /**
      * @ORM\Column(type="string", length=128)
      */
-    protected $scope;
+    protected $default_scope;
 
     /**
      * @ORM\Column(type="string", length=80)
      */
     protected $grant_types;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set client_id
@@ -102,6 +96,52 @@ class Client
     }
 
     /**
+     * Set name
+     *
+     * @param string $name
+     * @return Client
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set user_id
+     *
+     * @param integer $userId
+     * @return Client
+     */
+    public function setUserId($userId)
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get user_id
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
      * Set redirect_uri
      *
      * @param string $redirectUri
@@ -125,26 +165,26 @@ class Client
     }
 
     /**
-     * Set scope
+     * Set default_scope
      *
-     * @param string $scope
+     * @param string $defaultScope
      * @return Client
      */
-    public function setScope($scope)
+    public function setDefaultScope($defaultScope)
     {
-        $this->scope = $scope;
+        $this->default_scope = $defaultScope;
 
         return $this;
     }
 
     /**
-     * Get scope
+     * Get default_scope
      *
      * @return string
      */
-    public function getScope()
+    public function getDefaultScope()
     {
-        return $this->scope;
+        return $this->default_scope;
     }
 
     /**
