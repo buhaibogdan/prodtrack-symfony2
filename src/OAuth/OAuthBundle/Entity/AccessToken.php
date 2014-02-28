@@ -30,6 +30,15 @@ class AccessToken
     protected $access_token;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $refresh_token;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $token_type;
+    /**
      * @ORM\Column(type="integer")
      */
     protected $expires_in;
@@ -88,6 +97,52 @@ class AccessToken
     public function getAccessToken()
     {
         return $this->access_token;
+    }
+
+    /**
+     * Set refresh_token
+     *
+     * @param string $refreshToken
+     * @return AccessToken
+     */
+    public function setRefreshToken($refreshToken)
+    {
+        $this->refresh_token = $refreshToken;
+
+        return $this;
+    }
+
+    /**
+     * Get refresh_token
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->refresh_token;
+    }
+
+    /**
+     * Set token_type
+     *
+     * @param string $tokenType
+     * @return AccessToken
+     */
+    public function setTokenType($tokenType)
+    {
+        $this->token_type = $tokenType;
+
+        return $this;
+    }
+
+    /**
+     * Get token_type
+     *
+     * @return string
+     */
+    public function getTokenType()
+    {
+        return $this->token_type;
     }
 
     /**
