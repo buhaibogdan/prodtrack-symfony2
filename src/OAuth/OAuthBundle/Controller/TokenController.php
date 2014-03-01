@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class TokenController extends Controller
 {
     public function indexAction(Request $request)
@@ -15,12 +16,11 @@ class TokenController extends Controller
             return new Response('', Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
-        $username = $request->query->get('username');
-        $password = $request->query->get('password');
-        $clientId = $request->query->get('client_id');
-        $clientSecret = $request->query->get('client_secret');
-        $grantType = $request->query->get('grant_type');
-
+        $username = $request->request->get('username');
+        $password = $request->request->get('password');
+        $clientId = $request->request->get('client_id');
+        $clientSecret = $request->request->get('client_secret');
+        $grantType = $request->request->get('grant_type');
         if (empty($username) ||
             empty($password) ||
             empty($clientId) ||
@@ -29,6 +29,8 @@ class TokenController extends Controller
         ) {
             return new Response('Fields missing from request. Check documentation.', Response::HTTP_BAD_REQUEST);
         }
+
+        //$tokenGen = $this->get('o_auth.o_auth.token_generator');
 
         return $this->render('OAuthOAuthBundle:Default:index.html.twig');
     }
