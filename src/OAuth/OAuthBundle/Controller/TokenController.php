@@ -30,8 +30,6 @@ class TokenController extends Controller
             return new Response('Fields missing from request. Check documentation.', Response::HTTP_BAD_REQUEST);
         }
 
-        //$tokenGen = $this->get('o_auth.o_auth.token_generator');
-
         return $this->render('OAuthOAuthBundle:Default:index.html.twig');
     }
 }

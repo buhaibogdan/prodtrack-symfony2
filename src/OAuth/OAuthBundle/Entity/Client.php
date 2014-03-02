@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Client
  * @ORM\Entity(repositoryClass="OAuth\OAuthBundle\Repository\ClientRepository")
- * @ORM\Table(name="oauth_client")
+ * @ORM\Table(name="oauth_client", uniqueConstraints={@ORM\UniqueConstraint(
+ *      name="client_id_secret", columns={"client_id", "client_secret"}
+ * )})
  */
 class Client
 {
@@ -19,7 +21,7 @@ class Client
     protected $client_id;
 
     /**
-     * @ORM\Column(type="string", length=80, unique=true)
+     * @ORM\Column(type="string", length=40, unique=true)
      */
     protected $client_secret;
 

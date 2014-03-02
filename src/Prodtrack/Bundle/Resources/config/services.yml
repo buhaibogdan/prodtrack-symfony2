@@ -1,7 +1,7 @@
 parameters:
-#    activity.example.class: Prodtrack\Bundle\Example
+    prodtrack.user_service.class: Prodtrack\Bundle\Services\UserService
 
 services:
-#    activity.example:
-#        class: %activity.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    prodtrack.user_service:
+        class: %prodtrack.user_service.class%
+        arguments: []

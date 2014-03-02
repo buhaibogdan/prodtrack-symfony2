@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class AccessToken
  * @ORM\Entity(repositoryClass="OAuth\OAuthBundle\Repository\AccessTokenRepository")
- * @ORM\Table(name="oauth_access_token")
+ * @ORM\Table(name="oauth_access_token", uniqueConstraints={@ORM\UniqueConstraint(
+ *  name="client_token", columns={"client_id", "access_token"}
+ * )})
  */
 class AccessToken
 {
@@ -20,17 +22,17 @@ class AccessToken
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=80)
+     * @ORM\Column(type="string", length=40)
      */
     protected $client_id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=40)
      */
     protected $access_token;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=40)
      */
     protected $refresh_token;
 
