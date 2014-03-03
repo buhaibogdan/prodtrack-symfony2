@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class AccessToken
  * @ORM\Entity(repositoryClass="OAuth\OAuthBundle\Repository\AccessTokenRepository")
  * @ORM\Table(name="oauth_access_token", uniqueConstraints={@ORM\UniqueConstraint(
- *  name="client_token", columns={"client_id", "access_token"}
+ *  name="client_token", columns={"fk_client_id", "access_token"}
  * )})
  */
 class AccessToken
@@ -22,9 +22,9 @@ class AccessToken
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="integer", length=40)
      */
-    protected $client_id;
+    protected $fk_client_id;
 
     /**
      * @ORM\Column(type="string", length=40)
@@ -56,26 +56,26 @@ class AccessToken
     }
 
     /**
-     * Set client_id
+     * Set fk_client_id
      *
-     * @param string $clientId
+     * @param integer $fkClientId
      * @return AccessToken
      */
-    public function setClientId($clientId)
+    public function setFkClientId($fkClientId)
     {
-        $this->client_id = $clientId;
+        $this->fk_client_id = $fkClientId;
 
         return $this;
     }
 
     /**
-     * Get client_id
+     * Get fk_client_id
      *
-     * @return string
+     * @return integer
      */
-    public function getClientId()
+    public function getFkClientId()
     {
-        return $this->client_id;
+        return $this->fk_client_id;
     }
 
     /**

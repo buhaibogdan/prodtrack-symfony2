@@ -15,7 +15,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Client
 {
     /**
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    /**
      * @ORM\Column(type="string", length=40, unique=true)
      */
     protected $client_id;
@@ -50,6 +55,16 @@ class Client
      */
     protected $grant_types;
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set client_id
