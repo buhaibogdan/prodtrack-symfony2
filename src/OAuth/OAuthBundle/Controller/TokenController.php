@@ -29,6 +29,12 @@ class TokenController extends Controller
         ) {
             return new Response('Fields missing from request. Check documentation.', Response::HTTP_BAD_REQUEST);
         }
+        /** @var \Prodtrack\Bundle\Services\UserService $userService */
+        $userService = $this->get('prodtrack.user_service');
+        $user = $userService->getUserWithCredentials($username, $password);
+        if (is_null($user)) {
+            return new Response('', Response::HTTP_UNAUTHORIZED);
+        }
 
         return $this->render('OAuthOAuthBundle:Default:index.html.twig');
     }

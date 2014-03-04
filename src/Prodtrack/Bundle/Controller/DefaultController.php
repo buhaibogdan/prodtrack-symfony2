@@ -14,6 +14,7 @@ class DefaultController extends Controller
         if ($accept !== 'application/hal+json') {
             return new Response('', 406);
         }
-        return new Response('{}', 200, array('Content-type'=>'application/hal+json'));
+
+        return new Response('{}', 200, array('Content-type' => 'application/hal+json'));
     }
 }

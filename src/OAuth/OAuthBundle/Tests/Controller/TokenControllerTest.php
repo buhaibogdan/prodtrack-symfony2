@@ -31,13 +31,29 @@ class TokenControllerTest extends WebTestCase
         $this->assertEquals('Fields missing from request. Check documentation.', $response);
     }
 
-    public function testTokenHasRequiredParams()
+    public function testTokenHasRequiredParamsInvalid()
     {
         $postParams = array(
             'username' => 'bb',
-            'password' => '123456',
-            'client_id' => 'sfjg3nl4knansd2',
-            'client_secret' => 'fhbgkbk12kug312',
+            'password' => 'wrong',
+            'client_id' => 'a9df6c5b72622dbea463ad1a1ba774425efc7eea',
+            'client_secret' => '871c85109d7563735565d0b9c044432d3755c5c5',
+            'grant_type' => 'password'
+        );
+
+        $client = static::createClient();
+        $client->request('POST', '/oauth/token', $postParams);
+        $status = $client->getResponse()->getStatusCode();
+        $this->assertEquals('401', $status);
+    }
+
+    public function testTokenHasRequiredParamsValid()
+    {
+        $postParams = array(
+            'username' => 'bb',
+            'password' => 'bb',
+            'client_id' => 'a9df6c5b72622dbea463ad1a1ba774425efc7eea',
+            'client_secret' => '871c85109d7563735565d0b9c044432d3755c5c5',
             'grant_type' => 'password'
         );
 

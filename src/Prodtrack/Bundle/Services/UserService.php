@@ -22,7 +22,7 @@ class UserService implements IUserService
     public function getUserWithCredentials($username, $password)
     {
         /** @var \Prodtrack\Bundle\Repository\UserRepository $userRepo */
-        $userRepo = $this->em->getRepository('ProdtrackBundle::User');
+        $userRepo = $this->em->getRepository('Prodtrack\Bundle\Entity\User');
         return $userRepo->getUserWithCredentials($username, $password);
     }
 }
