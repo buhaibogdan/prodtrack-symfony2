@@ -4,7 +4,10 @@
 namespace OAuth\OAuthBundle\Repository;
 
 
-class ClientRepository
+use Doctrine\ORM\EntityRepository;
+
+class ClientRepository extends EntityRepository
 {
+
 
 }
