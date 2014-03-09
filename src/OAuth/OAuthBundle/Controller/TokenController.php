@@ -13,7 +13,7 @@ class TokenController extends Controller
     {
         if ($request->getMethod() !== 'POST') {
             // accept only post request
-            return new Response('', Response::HTTP_METHOD_NOT_ALLOWED);
+            return new Response('POST method required.', Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
         $username = $request->request->get('username');
@@ -31,11 +31,28 @@ class TokenController extends Controller
         }
         /** @var \Prodtrack\Bundle\Services\UserService $userService */
         $userService = $this->get('prodtrack.user_service');
+        //var_dump($username);
+        //var_dump($password);
         $user = $userService->getUserWithCredentials($username, $password);
         if (is_null($user)) {
-            return new Response('', Response::HTTP_UNAUTHORIZED);
+            return new Response('Invalid username or password.', Response::HTTP_UNAUTHORIZED);
         }
+        /** @var \OAuth\OAuthBundle\Services\ClientService $clientService */
+        $clientService = $this->get('o_auth.client_service');
+        $client = $clientService->getClient($clientId, $clientSecret, $grantType);
 
-        return $this->render('OAuthOAuthBundle:Default:index.html.twig');
+        if (is_null($client)) {
+            return new Response('Invalid client credentials.', Response::HTTP_UNAUTHORIZED);
+        }
+        /** @var \OAuth\OAuthBundle\Services\AccessTokenService $tokenService */
+        $tokenService = $this->get('o_auth.token_service');
+        $token = $tokenService->getAccessToken($client->getId());
+        $response = array(
+            'access_token' => $token->getAccessToken(),
+            'refresh_token' => $token->getRefreshToken(),
+            'expires_in' => $token->getExpiresIn()
+        );
+
+        return new Response(json_encode($response), 200, array('Content-type' => 'application/json'));
     }
 }

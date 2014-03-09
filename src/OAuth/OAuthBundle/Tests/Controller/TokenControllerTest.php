@@ -47,7 +47,7 @@ class TokenControllerTest extends WebTestCase
         $this->assertEquals('401', $status);
     }
 
-    public function testTokenHasRequiredParamsValid()
+    public function testResponseWithToken()
     {
         $postParams = array(
             'username' => 'bb',
@@ -60,6 +60,31 @@ class TokenControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/oauth/token', $postParams);
         $status = $client->getResponse()->getStatusCode();
+        $contentType = $client->getResponse()->headers->get('content-type');
+        $content = $client->getResponse()->getContent();
+        $content = json_decode($content, true);
+
         $this->assertEquals('200', $status);
+        $this->assertEquals('application/json', $contentType);
+        $this->assertTrue(is_array($content));
+        $this->assertTrue(isset($content['access_token']));
+        $this->assertTrue(isset($content['refresh_token']));
+        $this->assertTrue(isset($content['expires_in']));
+    }
+
+    public function testInvalidClient()
+    {
+        $postParams = array(
+            'username' => 'bb',
+            'password' => 'bb',
+            'client_id' => 'someinvalidid',
+            'client_secret' => '871c85109d7563735565d0b9c044432d3755c5c5',
+            'grant_type' => 'password'
+        );
+
+        $client = static::createClient();
+        $client->request('POST', '/oauth/token', $postParams);
+        $status = $client->getResponse()->getStatusCode();
+        $this->assertEquals('401', $status);
     }
 }
