@@ -9,9 +9,5 @@ interface IAccessTokenService
 {
     public function __construct(ObjectManager $em);
 
-    /**
-     * Returns a new token of 40 characters.
-     * @return string
-     */
-    public function getNewToken();
+    public function getAccessToken($clientId, $type, $lifeTime);
 }

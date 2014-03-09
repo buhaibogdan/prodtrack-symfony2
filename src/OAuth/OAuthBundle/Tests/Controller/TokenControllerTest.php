@@ -62,4 +62,20 @@ class TokenControllerTest extends WebTestCase
         $status = $client->getResponse()->getStatusCode();
         $this->assertEquals('200', $status);
     }
+
+    public function testInvalidClient()
+    {
+        $postParams = array(
+            'username' => 'bb',
+            'password' => 'bb',
+            'client_id' => 'someinvalidid',
+            'client_secret' => '871c85109d7563735565d0b9c044432d3755c5c5',
+            'grant_type' => 'password'
+        );
+
+        $client = static::createClient();
+        $client->request('POST', '/oauth/token', $postParams);
+        $status = $client->getResponse()->getStatusCode();
+        $this->assertEquals('401', $status);
+    }
 }

@@ -35,6 +35,13 @@ class TokenController extends Controller
         if (is_null($user)) {
             return new Response('', Response::HTTP_UNAUTHORIZED);
         }
+        /** @var \OAuth\OAuthBundle\Services\ClientService $clientService */
+        $clientService = $this->get('o_auth.client_service');
+        $client = $clientService->getClient($clientId, $clientSecret, $grantType);
+
+        if (is_null($client)) {
+            return new Response('', Response::HTTP_UNAUTHORIZED);
+        }
 
         return $this->render('OAuthOAuthBundle:Default:index.html.twig');
     }

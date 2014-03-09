@@ -1,5 +1,6 @@
 parameters:
     o_auth.token_service.class: OAuth\OAuthBundle\Services\AccessTokenService
+    o_auth.client_service.class: OAuth\OAuthBundle\Services\ClientService
     o_auth.token_repository.class: OAuth\OAuthBundle\Repository\AccessTokenRepository
 
 
@@ -9,4 +10,8 @@ services:
 #        arguments: [@service_id, "plain_value", %parameter%]
     o_auth.token_service:
         class: %o_auth.token_service.class%
-        arguments: ["%o_auth.token_repository.class%"]
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    o_auth.client_service:
+        class: %o_auth.client_service.class%
+        arguments: ["@doctrine.orm.entity_manager"]

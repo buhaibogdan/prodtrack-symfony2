@@ -8,8 +8,19 @@ use Doctrine\ORM\EntityRepository;
 
 class AccessTokenRepository extends EntityRepository
 {
-    public function getAccessToken()
+    /**
+     *
+     * @param $clientId
+     * @param $type
+     * @return null|object
+     */
+    public function getRecordForClient($clientId, $type)
     {
-        //$access_token = $tokenGen->getToken();
+        return $this->findOneBy(
+            array(
+                'fk_client_id' => $clientId,
+                'token_type' => $type
+            )
+        );
     }
 }
