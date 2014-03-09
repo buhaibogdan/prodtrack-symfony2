@@ -16,6 +16,12 @@ class ClientService implements IClientService
         $this->em = $em;
     }
 
+    /**
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $grantType
+     * @return null|\OAuth\OAuthBundle\Entity\Client|object
+     */
     public function getClient($clientId, $clientSecret, $grantType)
     {
         /** @var \OAuth\OAuthBundle\Repository\ClientRepository $repo */
