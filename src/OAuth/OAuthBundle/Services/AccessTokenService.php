@@ -22,8 +22,6 @@ class AccessTokenService implements IAccessTokenService
 
     public function handleResourceOwnerFlow($clientId, $clientSecret, $grantType)
     {
-        /** @var \OAuth\OAuthBundle\Repository\AccessTokenRepository $repo */
-        $repo = $this->em->getRepository('\OAuth\OAuthBundle\Entity\AccessToken');
-        return $repo->getClient($clientId, $clientSecret, $grantType);
+
     }
 }
