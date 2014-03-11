@@ -9,5 +9,11 @@ interface IAccessTokenService
 {
     public function __construct(ObjectManager $em);
 
-    public function getAccessToken($clientId, $type, $lifeTime);
+    /**
+     * @param $clientId
+     * @param string $type
+     * @param string $lifeTime
+     * @return \OAuth\OAuthBundle\Entity\AccessToken
+     */
+    public function getAccessToken($clientId, $type = 'bearer', $lifeTime = '3600');
 }

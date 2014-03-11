@@ -3,6 +3,9 @@ parameters:
     o_auth.client_service.class: OAuth\OAuthBundle\Services\ClientService
     o_auth.token_repository.class: OAuth\OAuthBundle\Repository\AccessTokenRepository
 
+    o_auth.token_listener.class: OAuth\OAuthBundle\EventListener\TokenListener
+    o_auth.authenticator.class: OAuth\OAuthBundle\Services\ClientAuthenticator
+
 
 services:
 #    o_auth_o_auth.example:
@@ -15,3 +18,13 @@ services:
     o_auth.client_service:
         class: %o_auth.client_service.class%
         arguments: ["@doctrine.orm.entity_manager"]
+
+    o_auth.authenticator:
+        class: %o_auth.authenticator.class%
+        arguments: ["@o_auth.client_service", "@o_auth.token_service"]
+
+    o_auth.token_listener:
+        class: %o_auth.token_listener.class%
+        arguments: ["@o_auth.authenticator"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

@@ -67,6 +67,16 @@ class Client
     }
 
     /**
+     * @param $id
+     * @return Client
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * Set client_id
      *
      * @param string $clientId

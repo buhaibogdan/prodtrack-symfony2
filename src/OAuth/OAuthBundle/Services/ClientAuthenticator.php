@@ -3,19 +3,32 @@
 
 namespace OAuth\OAuthBundle\Services;
 
-use OAuth\OAuthBundle\Repository\ClientRepository;
+
+use OAuth\OAuthBundle\Exception\ClientNotFoundException;
 
 class ClientAuthenticator implements IClientAuthenticator
 {
-    protected $clientRepo = null;
+    protected $clientService;
+    protected $tokenService;
 
-    public function __construct(ClientRepository $clientRepo)
+    public function __construct(IClientService $clientService, IAccessTokenService $tokenService)
     {
-        $this->clientRepo = $clientRepo;
+        $this->clientService = $clientService;
+        $this->tokenService = $tokenService;
     }
 
-    public function checkClientCredentials($clientId, $clientSecret, $grantType, $scope)
+    public function getTokenForClient($clientId, $clientSecret, $grantType)
     {
-        // TODO: Implement checkClientCredentials() method.
+        $client = $this->clientService->getClient($clientId, $clientSecret, $grantType);
+        if (is_null($client)) {
+            throw new ClientNotFoundException();
+        }
+
+        $token = $this->tokenService->getAccessToken($client->getId());
+        return array(
+            'access_token' => $token->getAccessToken(),
+            'refresh_token' => $token->getRefreshToken(),
+            'expires_in' => $token->getExpiresIn()
+        );
     }
 }
