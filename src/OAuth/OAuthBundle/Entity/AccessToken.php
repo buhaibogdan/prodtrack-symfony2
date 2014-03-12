@@ -46,6 +46,11 @@ class AccessToken
     protected $expires_in;
 
     /**
+     * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    protected $created_on;
+
+    /**
      * Get id
      *
      * @return integer
@@ -168,5 +173,28 @@ class AccessToken
     public function getExpiresIn()
     {
         return $this->expires_in;
+    }
+
+    /**
+     * Set created_on
+     *
+     * @param \DateTime $createdOn
+     * @return AccessToken
+     */
+    public function setCreatedOn($createdOn)
+    {
+        $this->created_on = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * Get created_on
+     *
+     * @return \DateTime
+     */
+    public function getCreatedOn()
+    {
+        return $this->created_on;
     }
 }

@@ -20,6 +20,7 @@ class AccessTokenServiceTest extends \PHPUnit_Framework_TestCase
         $validAccessTokenRecord->setFkClientId(1);
         $validAccessTokenRecord->setTokenType('bearer');
         $validAccessTokenRecord->setRefreshToken('9d3792e447a515891dc9f02afa449b9237e3c9c6');
+        $validAccessTokenRecord->setCreatedOn(new \DateTime());
         $this->validAccessTokenRecord = $validAccessTokenRecord;
     }
 
@@ -81,5 +82,75 @@ class AccessTokenServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertTrue(is_string($accessToken->getAccessToken()), 'access token is not string');
         $this->assertTrue(is_string($accessToken->getRefreshToken()), 'refresh token is not string');
+    }
+
+    public function testCheckTokenValid()
+    {
+        $tokenRepo = $this->getMockBuilder('\OAuth\OAuthBundle\Repository\AccessTokenRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tokenRepo->expects($this->once())
+            ->method('getAccessTokenByType')
+            ->with('3b4b89cc13254d43775b0a3027fdae5cd721c98e', 'bearer')
+            ->will($this->returnValue($this->validAccessTokenRecord));
+
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($tokenRepo));
+
+        $tokenService = new AccessTokenService($em);
+        $status = $tokenService->isTokenValid('3b4b89cc13254d43775b0a3027fdae5cd721c98e', 'bearer');
+
+        $this->assertTrue($status, 'Token expired. Was not supposed to.');
+    }
+
+    public function testCheckTokenInvalid()
+    {
+        $tokenRepo = $this->getMockBuilder('\OAuth\OAuthBundle\Repository\AccessTokenRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tokenRepo->expects($this->once())
+            ->method('getAccessTokenByType')
+            ->with('invalid', 'bearer')
+            ->will($this->returnValue(null));
+
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($tokenRepo));
+
+        $tokenService = new AccessTokenService($em);
+        $status = $tokenService->isTokenValid('invalid', 'bearer');
+
+        $this->assertFalse($status, 'Token found. Was not supposed to.');
+    }
+
+    public function testCheckTokenExpired()
+    {
+        $this->validAccessTokenRecord->setCreatedOn(new \DateTime('-2 hours'));
+        $tokenRepo = $this->getMockBuilder('\OAuth\OAuthBundle\Repository\AccessTokenRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $tokenRepo->expects($this->once())
+            ->method('getAccessTokenByType')
+            ->with('3b4b89cc13254d43775b0a3027fdae5cd721c98e', 'bearer')
+            ->will($this->returnValue($this->validAccessTokenRecord));
+
+        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($tokenRepo));
+
+        $tokenService = new AccessTokenService($em);
+        $status = $tokenService->isTokenValid('3b4b89cc13254d43775b0a3027fdae5cd721c98e', 'bearer');
+
+        $this->assertFalse($status, 'Token should have expired');
     }
 }

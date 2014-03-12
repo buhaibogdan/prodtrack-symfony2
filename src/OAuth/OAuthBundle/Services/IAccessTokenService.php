@@ -16,4 +16,11 @@ interface IAccessTokenService
      * @return \OAuth\OAuthBundle\Entity\AccessToken
      */
     public function getAccessToken($clientId, $type = 'bearer', $lifeTime = '3600');
+
+    /**
+     * @param $access_token
+     * @param $type
+     * @return boolean
+     */
+    public function isTokenValid($access_token, $type);
 }

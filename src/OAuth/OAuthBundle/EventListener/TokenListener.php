@@ -25,10 +25,32 @@ class TokenListener
             return;
         }
 
-        if ($controller[0] instanceof ITokenAuthenticatedController) {
-            // get auth header
+        if (!$controller[0] instanceof ITokenAuthenticatedController) {
+
+            $authHeader = null;
+            if (!$event->getRequest()->headers->has('Authorization') && function_exists('apache_request_headers')) {
+                $all = apache_request_headers();
+                if (isset($all['Authorization'])) {
+                    $authHeader = $all['Authorization'];
+                }
+            }
+            // parse header
+            $authHeaderParts = explode(' ', $authHeader);
+            $authHeaderParsed = array();
+            foreach ($authHeaderParts as $part) {
+                $part = trim(strtolower($part));
+                if ($part === 'bearer') {
+                    $authHeaderParsed['type'] = $part;
+                } elseif (strlen($part) >= 40) {
+                    $authHeaderParsed['access_token'] = $part;
+                }
+            }
+
+
             // check token state
             // return message or throw exception
+
+        } else {
             throw new AccessDeniedHttpException("No token? :(");
         }
     }
