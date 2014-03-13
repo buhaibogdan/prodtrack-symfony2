@@ -31,4 +31,35 @@ class ClientAuthenticator implements IClientAuthenticator
             'expires_in' => $token->getExpiresIn()
         );
     }
+
+    /**
+     * @param string $authHeader like "Bearer dlsjbgkb3kjbkjsh3ush9934541243edf444"
+     * @return bool
+     */
+    public function hasValidAuthorization($authHeader)
+    {
+        // parse header
+        $authHeaderParts = explode(' ', $authHeader);
+        $authHeaderParsed = array();
+        foreach ($authHeaderParts as $part) {
+            $part = trim(strtolower($part));
+            if ($part === 'bearer') {
+                $authHeaderParsed['type'] = $part;
+            } elseif (strlen($part) >= 40) {
+                $authHeaderParsed['access_token'] = $part;
+            }
+        }
+
+        if (array_key_exists('type', $authHeaderParsed) &&
+            array_key_exists('access_token', $authHeaderParsed)
+        ) {
+
+            return $this->tokenService->isTokenValid(
+                $authHeaderParsed['access_token'],
+                $authHeaderParsed['type']
+            );
+        }
+
+        return false;
+    }
 }

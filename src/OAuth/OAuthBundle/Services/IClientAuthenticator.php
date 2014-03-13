@@ -15,4 +15,10 @@ interface IClientAuthenticator
      * @return mixed
      */
     public function getTokenForClient($clientId, $clientSecret, $grantType);
+
+    /**
+     * @param string $authorizationHeader
+     * @return boolean
+     */
+    public function hasValidAuthorization($authorizationHeader);
 }

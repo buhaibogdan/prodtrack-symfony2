@@ -89,4 +89,39 @@ class ClientAuthenticatorTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('refresh_token', $token);
         $this->assertArrayHasKey('expires_in', $token);
     }
+
+    public function testHasValidAuthorizationTrue()
+    {
+        $this->tokenServiceMock->expects($this->once())
+            ->method('isTokenValid')
+            ->with('3b4b89cc13254d43775b0a3027fdae5cd721c98e', 'bearer')
+            ->will($this->returnValue(true));
+
+        $this->clientServiceMock->expects($this->never())
+            ->method('getClient')
+            ->will($this->returnValue($this->validClient));
+
+        $auth = new ClientAuthenticator($this->clientServiceMock, $this->tokenServiceMock);
+        $authHeader = 'Bearer 3b4b89cc13254d43775b0a3027fdae5cd721c98e';
+        $headerValid = $auth->hasValidAuthorization($authHeader);
+
+        $this->assertTrue($headerValid, 'Authorization is not valid.');
+    }
+
+    public function testHasValidAuthorizationFalse()
+    {
+        $this->tokenServiceMock->expects($this->never())
+            ->method('isTokenValid')
+            ->will($this->returnValue(false));
+
+        $this->clientServiceMock->expects($this->never())
+            ->method('getClient')
+            ->will($this->returnValue($this->validClient));
+
+        $auth = new ClientAuthenticator($this->clientServiceMock, $this->tokenServiceMock);
+        $authHeader = 'notbearer 3b4b89cc13254d43775b0a3027fdae5cd721c98e';
+        $headerValid = $auth->hasValidAuthorization($authHeader);
+
+        $this->assertFalse($headerValid, 'Authorization is valid and it should not be.');
+    }
 }

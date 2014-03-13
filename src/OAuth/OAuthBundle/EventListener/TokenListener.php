@@ -34,18 +34,8 @@ class TokenListener
                     $authHeader = $all['Authorization'];
                 }
             }
-            // parse header
-            $authHeaderParts = explode(' ', $authHeader);
-            $authHeaderParsed = array();
-            foreach ($authHeaderParts as $part) {
-                $part = trim(strtolower($part));
-                if ($part === 'bearer') {
-                    $authHeaderParsed['type'] = $part;
-                } elseif (strlen($part) >= 40) {
-                    $authHeaderParsed['access_token'] = $part;
-                }
-            }
 
+            $validAuthorization = $this->auth->hasValidAuthorization($authHeader);
 
             // check token state
             // return message or throw exception
