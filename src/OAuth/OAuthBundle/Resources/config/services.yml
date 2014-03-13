@@ -28,3 +28,4 @@ services:
         arguments: ["@o_auth.authenticator"]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
