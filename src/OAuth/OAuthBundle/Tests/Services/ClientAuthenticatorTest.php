@@ -17,7 +17,11 @@ class ClientAuthenticatorTest extends \PHPUnit_Framework_TestCase
 
     protected $clientId = 'a9df6c5b72622dbea463ad1a1ba774425efc7eea';
     protected $clientSecret = '871c85109d7563735565d0b9c044432d3755c5c5';
-    protected $grantType = 'password';
+    protected $grantTypePassword = 'password';
+    protected $grantTypeRefresh = 'refresh_token';
+
+    protected $validRefreshToken = '7accc0764185a19ea4f7d20ae4053a5a467ef589';
+    protected $invalidRefreshToken = 'invalid';
 
     public function setUp()
     {
@@ -78,11 +82,11 @@ class ClientAuthenticatorTest extends \PHPUnit_Framework_TestCase
 
         $this->clientServiceMock->expects($this->once())
             ->method('getClient')
-            ->with($this->clientId, $this->clientSecret, $this->grantType)
+            ->with($this->clientId, $this->clientSecret, $this->grantTypePassword)
             ->will($this->returnValue($this->validClient));
 
         $auth = new ClientAuthenticator($this->clientServiceMock, $this->tokenServiceMock);
-        $token = $auth->getTokenForClient($this->clientId, $this->clientSecret, $this->grantType);
+        $token = $auth->getTokenForClient($this->clientId, $this->clientSecret, $this->grantTypePassword);
 
         $this->assertTrue(is_array($token), 'Token is not array.');
         $this->assertArrayHasKey('access_token', $token);
@@ -123,5 +127,28 @@ class ClientAuthenticatorTest extends \PHPUnit_Framework_TestCase
         $headerValid = $auth->hasValidAuthorization($authHeader);
 
         $this->assertFalse($headerValid, 'Authorization is valid and it should not be.');
+    }
+
+
+    /**
+     * @expectedException \OAuth\OAuthBundle\Exception\InvalidRefreshTokenException
+     */
+    public function testGetTokenForClientRefreshInvalid()
+    {
+        $this->tokenServiceMock->expects($this->once())
+            ->method('getAccessTokenForRefresh')
+            ->with($this->invalidRefreshToken)
+            ->will($this->returnValue(null));
+
+        $this->clientServiceMock->expects($this->never())
+            ->method('getClient')
+            ->will($this->returnValue($this->validClient));
+
+        $auth = new ClientAuthenticator($this->clientServiceMock, $this->tokenServiceMock);
+        $auth->getTokenForRefresh(
+            $this->invalidRefreshToken
+        );
+
+        $this->assertTrue(false, 'InvalidRefreshTokenException not thrown.');
     }
 }

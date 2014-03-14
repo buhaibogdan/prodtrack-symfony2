@@ -18,6 +18,12 @@ interface IAccessTokenService
     public function getAccessToken($clientId, $type = 'bearer', $lifeTime = '3600');
 
     /**
+     * @param $refreshToken
+     * @return \OAuth\OAuthBundle\Entity\AccessToken
+     */
+    public function getAccessTokenForRefresh($refreshToken);
+
+    /**
      * @param $access_token
      * @param $type
      * @return boolean

@@ -9,9 +9,9 @@ interface IClientAuthenticator
     public function __construct(IClientService $clientService, IAccessTokenService $tokenService);
 
     /**
-     * @param $clientId
-     * @param $clientSecret
-     * @param $grantType
+     * @param int $clientId
+     * @param string $clientSecret
+     * @param string $grantType
      * @return mixed
      */
     public function getTokenForClient($clientId, $clientSecret, $grantType);

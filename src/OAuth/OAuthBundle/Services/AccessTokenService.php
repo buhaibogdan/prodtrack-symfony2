@@ -5,7 +5,6 @@ namespace OAuth\OAuthBundle\Services;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use OAuth\OAuthBundle\Entity\AccessToken;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 
 class AccessTokenService implements IAccessTokenService
@@ -44,6 +43,23 @@ class AccessTokenService implements IAccessTokenService
             $this->em->persist($accessToken);
         }
 
+        $this->em->flush();
+
+        return $accessToken;
+    }
+
+    public function getAccessTokenForRefresh($refreshToken, $type = 'bearer')
+    {
+        /** @var \OAuth\OAuthBundle\Repository\AccessTokenRepository $repo */
+        $repo = $this->em->getRepository('\OAuth\OAuthBundle\Entity\AccessToken');
+        $accessToken = $repo->getRecordWithRefreshToken($refreshToken);
+
+        if (!$accessToken instanceof AccessToken) {
+            return null;
+        }
+
+        $accessToken->setRefreshToken($this->getNewToken());
+        $accessToken->setAccessToken($this->getNewToken());
         $this->em->flush();
 
         return $accessToken;

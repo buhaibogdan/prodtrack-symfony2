@@ -5,6 +5,7 @@ namespace OAuth\OAuthBundle\Services;
 
 
 use OAuth\OAuthBundle\Exception\ClientNotFoundException;
+use OAuth\OAuthBundle\Exception\InvalidRefreshTokenException;
 
 class ClientAuthenticator implements IClientAuthenticator
 {
@@ -25,6 +26,21 @@ class ClientAuthenticator implements IClientAuthenticator
         }
 
         $token = $this->tokenService->getAccessToken($client->getId());
+
+        return array(
+            'access_token' => $token->getAccessToken(),
+            'refresh_token' => $token->getRefreshToken(),
+            'expires_in' => $token->getExpiresIn()
+        );
+    }
+
+    public function getTokenForRefresh($refreshToken)
+    {
+        $token = $this->tokenService->getAccessTokenForRefresh($refreshToken);
+        if (is_null($token)) {
+            throw new InvalidRefreshTokenException();
+        }
+
         return array(
             'access_token' => $token->getAccessToken(),
             'refresh_token' => $token->getRefreshToken(),
@@ -38,7 +54,6 @@ class ClientAuthenticator implements IClientAuthenticator
      */
     public function hasValidAuthorization($authHeader)
     {
-        // parse header
         $authHeaderParts = explode(' ', $authHeader);
         $authHeaderParsed = array();
         foreach ($authHeaderParts as $part) {

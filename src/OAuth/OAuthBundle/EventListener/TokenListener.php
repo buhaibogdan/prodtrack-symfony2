@@ -28,10 +28,12 @@ class TokenListener
             return;
         }
 
-        if (!$controller[0] instanceof ITokenAuthenticatedController) {
+        if ($controller[0] instanceof ITokenAuthenticatedController) {
 
             $authHeader = null;
-            if (!$event->getRequest()->headers->has('Authorization') && function_exists('apache_request_headers')) {
+            if (!$event->getRequest()->headers->has('Authorization') &&
+                function_exists('apache_request_headers')
+            ) {
                 $all = apache_request_headers();
                 if (isset($all['Authorization'])) {
                     $authHeader = $all['Authorization'];
@@ -47,7 +49,7 @@ class TokenListener
             // return message or throw exception
 
         } else {
-            throw new AccessDeniedHttpException("No token? :(");
+
         }
     }
 
