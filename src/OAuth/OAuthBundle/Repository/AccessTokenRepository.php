@@ -23,4 +23,32 @@ class AccessTokenRepository extends EntityRepository
             )
         );
     }
+
+    /**
+     * @param $refreshToken
+     * @return null|object
+     */
+    public function getRecordWithRefreshToken($refreshToken)
+    {
+        return $this->findOneBy(
+            array(
+                'refresh_token' => $refreshToken
+            )
+        );
+    }
+
+    /**
+     * @param $access_token
+     * @param $token_type
+     * @return null|object
+     */
+    public function getAccessTokenByType($access_token, $token_type)
+    {
+        return $this->findOneBy(
+            array(
+                'access_token' => $access_token,
+                'token_type' => $token_type
+            )
+        );
+    }
 }

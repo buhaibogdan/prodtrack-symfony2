@@ -47,4 +47,44 @@ class AccessTokenService implements IAccessTokenService
 
         return $accessToken;
     }
+
+    public function getAccessTokenForRefresh($refreshToken, $type = 'bearer')
+    {
+        /** @var \OAuth\OAuthBundle\Repository\AccessTokenRepository $repo */
+        $repo = $this->em->getRepository('\OAuth\OAuthBundle\Entity\AccessToken');
+        $accessToken = $repo->getRecordWithRefreshToken($refreshToken);
+
+        if (!$accessToken instanceof AccessToken) {
+            return null;
+        }
+
+        $accessToken->setRefreshToken($this->getNewToken());
+        $accessToken->setAccessToken($this->getNewToken());
+        $this->em->flush();
+
+        return $accessToken;
+    }
+
+    /**
+     * @param $access_token
+     * @param $type
+     * @return boolean
+     */
+    public function isTokenValid($access_token, $type)
+    {
+        /** @var \OAuth\OAuthBundle\Repository\AccessTokenRepository $repo */
+        $repo = $this->em->getRepository('\OAuth\OAuthBundle\Entity\AccessToken');
+        $token = $repo->getAccessTokenByType($access_token, $type);
+
+        if (!$token instanceof AccessToken) {
+            return false;
+        }
+
+        $expiresIn = $token->getExpiresIn();
+        $expireTime = $token->getCreatedOn()
+            ->add(new \DateInterval('PT' . $expiresIn . 'S'))
+            ->getTimestamp();
+        $currentTimeStamp = time(true);
+        return ($expireTime - $currentTimeStamp) > 0;
+    }
 }

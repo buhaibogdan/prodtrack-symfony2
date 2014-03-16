@@ -3,11 +3,22 @@
 
 namespace OAuth\OAuthBundle\Services;
 
-use OAuth\OAuthBundle\Repository\ClientRepository;
 
 interface IClientAuthenticator
 {
-    public function __construct(ClientRepository $clientRepo);
+    public function __construct(IClientService $clientService, IAccessTokenService $tokenService);
 
-    public function checkClientCredentials($clientId, $clientSecret, $grantType, $scope);
+    /**
+     * @param int $clientId
+     * @param string $clientSecret
+     * @param string $grantType
+     * @return mixed
+     */
+    public function getTokenForClient($clientId, $clientSecret, $grantType);
+
+    /**
+     * @param string $authorizationHeader
+     * @return boolean
+     */
+    public function hasValidAuthorization($authorizationHeader);
 }
