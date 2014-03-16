@@ -2,11 +2,12 @@
 
 namespace Prodtrack\Bundle\Controller;
 
+use OAuth\OAuthBundle\Controller\ITokenAuthenticatedController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class DefaultController extends Controller implements ITokenAuthenticatedController
 {
     public function indexAction(Request $request)
     {

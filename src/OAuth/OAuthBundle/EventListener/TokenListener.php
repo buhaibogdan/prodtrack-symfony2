@@ -9,7 +9,6 @@ use OAuth\OAuthBundle\Services\IClientAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TokenListener
 {
@@ -45,11 +44,6 @@ class TokenListener
             if (!$validAuthorization) {
                 throw new InvalidTokenException();
             }
-            // check token state
-            // return message or throw exception
-
-        } else {
-
         }
     }
 
