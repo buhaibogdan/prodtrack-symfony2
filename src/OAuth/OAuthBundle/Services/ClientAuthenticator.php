@@ -22,7 +22,7 @@ class ClientAuthenticator implements IClientAuthenticator
     {
         $client = $this->clientService->getClient($clientId, $clientSecret, $grantType);
         if (is_null($client)) {
-            throw new ClientNotFoundException();
+            throw new ClientNotFoundException('Invalid client credentials.');
         }
 
         $token = $this->tokenService->getAccessToken($client->getId());
