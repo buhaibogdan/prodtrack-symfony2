@@ -5,6 +5,7 @@ namespace OAuth\OAuthBundle\EventListener;
 
 use OAuth\OAuthBundle\Controller\ITokenAuthenticatedController;
 use OAuth\OAuthBundle\Exception\InvalidTokenException;
+use OAuth\OAuthBundle\Services\ErrorResponse;
 use OAuth\OAuthBundle\Services\IClientAuthenticator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -13,10 +14,12 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 class TokenListener
 {
     private $auth;
+    private $errResp;
 
-    public function __construct(IClientAuthenticator $auth)
+    public function __construct(IClientAuthenticator $auth, ErrorResponse $errResp)
     {
         $this->auth = $auth;
+        $this->errResp = $errResp;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -52,15 +55,8 @@ class TokenListener
     {
         $exception = $event->getException();
         if ($exception instanceof InvalidTokenException) {
-            $response = new Response(
-                '',
-                Response::HTTP_UNAUTHORIZED,
-                array('WWW-Authenticate' => $this->getTokenExpiredError())
-            );
-            $event->setResponse($response);
+            return $this->errResp->getInvalidClientResponse();
         }
-
-
     }
 
     /**

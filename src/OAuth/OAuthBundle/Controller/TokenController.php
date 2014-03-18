@@ -23,17 +23,19 @@ class TokenController extends Controller
             return new Response('POST method required.', Response::HTTP_METHOD_NOT_ALLOWED);
         }
 
+        /** @var \OAuth\OAuthBundle\Services\ErrorResponse $errResponse */
+        $errResponse = $this->get('o_auth.error_response');
         $grantType = $request->request->get('grant_type');
 
         if ($grantType === static::GRANT_TYPE_PASSWORD) {
             try {
                 $token = $this->getToken($request, $grantType);
             } catch (UserNotFoundException $e) {
-                return new Response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+                return $errResponse->getInvalidUserResponse();
             } catch (ClientNotFoundException $e) {
-                return new Response($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+                return $errResponse->getInvalidClientResponse();
             } catch (MissingMandatoryParametersException $e) {
-                return new Response($e->getMessage(), Response::HTTP_BAD_REQUEST);
+                return $errResponse->getInvalidRequestResponse();
             }
 
         } elseif ($grantType === static::GRANT_TYPE_REFRESH_TOKEN) {
@@ -47,7 +49,7 @@ class TokenController extends Controller
                 return new Response('Invalid refresh token.', Response::HTTP_UNAUTHORIZED);
             }
         } else {
-            return new Response('Invalid grant type.', Response::HTTP_BAD_REQUEST);
+            return $errResponse->getUnsupportedGrantTypeRequest();
         }
 
 

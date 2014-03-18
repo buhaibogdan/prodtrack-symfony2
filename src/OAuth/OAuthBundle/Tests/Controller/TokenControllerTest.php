@@ -26,9 +26,9 @@ class TokenControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/oauth/token', $postParams);
         $status = $client->getResponse()->getStatusCode();
-        $response = $client->getResponse()->getContent();
+        $header = $client->getResponse()->headers->get('WWW-Authenticate');
         $this->assertEquals('400', $status);
-        $this->assertEquals('Invalid grant type.', $response);
+        $this->assertEquals('Bearer "prodTrack", error="unsupported_grant_type"', $header);
     }
 
     public function testTokenHasRequiredParamsInvalid()
@@ -44,7 +44,13 @@ class TokenControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/oauth/token', $postParams);
         $status = $client->getResponse()->getStatusCode();
+        $header = $client->getResponse()->headers->get('WWW-Authenticate');
+
         $this->assertEquals('401', $status);
+        $this->assertEquals(
+            'Bearer "prodTrack, error="invalid_user", error_description="Username or password invalid."',
+            $header
+        );
     }
 
     public function testResponseWithToken()
@@ -85,7 +91,12 @@ class TokenControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/oauth/token', $postParams);
         $status = $client->getResponse()->getStatusCode();
+        $header = $client->getResponse()->headers->get('WWW-Authenticate');
         $this->assertEquals('401', $status);
+        $this->assertEquals(
+            'Bearer "prodTrack", error="invalid_client", error_description="Client authentication failed."',
+            $header
+        );
     }
 
     public function testResponseWithRefreshToken()

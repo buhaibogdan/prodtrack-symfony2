@@ -20,6 +20,9 @@ class ErrorResponse
     protected $unsupportedGrantType =
         'Bearer "prodTrack", error="unsupported_grant_type"';
 
+    protected $invalidUser =
+        'Bearer "prodTrack, error="invalid_user", error_description="Username or password invalid."';
+
     /**
      * @return Response
      */
@@ -56,6 +59,15 @@ class ErrorResponse
             '',
             Response::HTTP_BAD_REQUEST,
             array('WWW-Authenticate' => $this->unsupportedGrantType)
+        );
+    }
+
+    public function getInvalidUserResponse()
+    {
+        return new Response(
+            '',
+            Response::HTTP_UNAUTHORIZED,
+            array('WWW-Authenticate' => $this->invalidUser)
         );
     }
 

@@ -6,6 +6,8 @@ parameters:
     o_auth.token_listener.class: OAuth\OAuthBundle\EventListener\TokenListener
     o_auth.authenticator.class: OAuth\OAuthBundle\Services\ClientAuthenticator
 
+    o_auth.error_response.class: OAuth\OAuthBundle\Services\ErrorResponse
+
 
 services:
 #    o_auth_o_auth.example:
@@ -23,9 +25,13 @@ services:
         class: %o_auth.authenticator.class%
         arguments: ["@o_auth.client_service", "@o_auth.token_service"]
 
+    o_auth.error_response:
+        class: %o_auth.error_response.class%
+        arguments: []
+
     o_auth.token_listener:
         class: %o_auth.token_listener.class%
-        arguments: ["@o_auth.authenticator"]
+        arguments: ["@o_auth.authenticator", "@o_auth.error_response"]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

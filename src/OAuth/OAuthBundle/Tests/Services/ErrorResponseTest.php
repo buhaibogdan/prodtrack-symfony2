@@ -74,4 +74,20 @@ class ErrorResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($header, $errorMsg);
     }
 
+    public function testGetInvalidUserResponse()
+    {
+        $errorMsg =
+            'Bearer "prodTrack, error="invalid_user", error_description="Username or password invalid."';
+
+        $err = new ErrorResponse();
+        $invalidToken = $err->getInvalidUserResponse();
+        $status = $invalidToken->getStatusCode();
+        $header = $invalidToken->headers->get('WWW-Authenticate');
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $invalidToken);
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $status);
+        $this->assertEmpty($invalidToken->getContent());
+        $this->assertEquals($header, $errorMsg);
+    }
+
 }
