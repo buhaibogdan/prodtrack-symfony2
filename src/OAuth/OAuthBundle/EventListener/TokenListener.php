@@ -55,7 +55,7 @@ class TokenListener
     {
         $exception = $event->getException();
         if ($exception instanceof InvalidTokenException) {
-            return $this->errResp->getInvalidClientResponse();
+            $event->setResponse($this->errResp->getInvalidClientResponse());
         }
     }
 

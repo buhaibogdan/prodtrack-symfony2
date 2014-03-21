@@ -4,7 +4,9 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+            "": "src/"
+        }
     },
     "require": {
         "php": ">=5.3.3",
@@ -21,7 +23,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "phpunit/phpunit": "3.7.*",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "friendsofsymfony/oauth-server-bundle": "dev-master"
+        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "ircmaxell/password-compat": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

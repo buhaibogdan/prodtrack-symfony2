@@ -17,7 +17,7 @@ class User
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected  $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=128)
@@ -47,7 +47,7 @@ class User
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -70,7 +70,7 @@ class User
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -81,11 +81,12 @@ class User
      * Set password
      *
      * @param string $password
+     * @param int $cost
      * @return User
      */
-    public function setPassword($password)
+    public function setPassword($password, $cost = 10)
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_BCRYPT, array('cost' => $cost));
 
         return $this;
     }
@@ -93,7 +94,7 @@ class User
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -116,7 +117,7 @@ class User
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -139,7 +140,7 @@ class User
     /**
      * Get register_date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRegisterDate()
     {
@@ -162,7 +163,7 @@ class User
     /**
      * Get last_login
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastLogin()
     {

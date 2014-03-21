@@ -32,13 +32,12 @@ class DefaultControllerTest extends WebTestCase
             array(),
             array(),
             array(
-                'HTTP_Accept' => 'application/hal+json',
+                'HTTP_Accept' => 'application/vnd.collection+json',
                 'HTTP_AUTHORIZATION' => 'Bearer 3de216ba6dedcf3bd2a592a071c01b5cdba0669f'
             )
         );
         $contentType = $client->getResponse()->headers->get('content-type');
-        file_put_contents('cnt.html', $client->getResponse()->getContent());
-        $this->assertEquals('application/hal+json', $contentType);
+        $this->assertEquals('application/vnd.collection+json', $contentType);
     }
 
     public function testIndexIncorrectAcceptHeaders()
@@ -70,7 +69,7 @@ class DefaultControllerTest extends WebTestCase
             array(),
             array(),
             array(
-                'HTTP_Accept' => 'application/hal+json',
+                'HTTP_Accept' => 'application/vnd.collection+json',
                 'HTTP_AUTHORIZATION' => 'Bearer 3de216ba6dedcf3bd2a592a071c01b5cdba0669f'
             )
         );

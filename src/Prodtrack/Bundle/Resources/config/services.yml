@@ -1,8 +1,15 @@
 parameters:
     prodtrack.user_service.class: Prodtrack\Bundle\Services\UserService
+    prodtrack.content_negotiator.class: Prodtrack\Bundle\EventListener\ContentNegotiator
 
 services:
     prodtrack.user_service:
         class: %prodtrack.user_service.class%
         arguments:
           entityManager: "@doctrine.orm.entity_manager"
+    prodtrack.content_negotiator:
+        class: %prodtrack.content_negotiator.class%
+        arguments: ["application/vnd.collection+json"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

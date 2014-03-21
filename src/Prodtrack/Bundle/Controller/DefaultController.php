@@ -12,10 +12,10 @@ class DefaultController extends Controller implements ITokenAuthenticatedControl
     public function indexAction(Request $request)
     {
         $accept = $request->headers->get('accept');
-        if ($accept !== 'application/hal+json') {
+        if ($accept !== 'application/vnd.collection+json') {
             return new Response('', 406);
         }
 
-        return new Response('{}', 200, array('Content-type' => 'application/hal+json'));
+        return new Response('{}', 200, array('Content-type' => 'application/vnd.collection+json'));
     }
 }
