@@ -7,7 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class StatusController extends Controller implements ITokenAuthenticatedController
+class StatusController extends Controller
+    implements ITokenAuthenticatedController, ICollectionJsonController
 {
     public function indexAction(Request $request)
     {

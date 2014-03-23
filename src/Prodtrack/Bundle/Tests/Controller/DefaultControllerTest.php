@@ -12,7 +12,7 @@ class DefaultControllerTest extends WebTestCase
         $auth = $this->getMockBuilder('\OAuth\OAuthBundle\Services\ClientAuthenticator')
             ->disableOriginalConstructor()
             ->getMock();
-        $auth->expects($this->once())
+        $auth->expects($this->any())
             ->method('hasValidAuthorization')
             // this should be "Bearer 3de216ba6dedcf3bd2a592a071c01b5cdba0669f"
             // but it seems the authorization header is not passes from the tests (BrowserKit?)
