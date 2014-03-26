@@ -3,7 +3,9 @@
 namespace Prodtrack\Bundle\Repository;
 
 
-class ActivityLogRepository
+use Doctrine\ORM\EntityRepository;
+
+class ActivityLogRepository extends EntityRepository
 {
 
 } 
