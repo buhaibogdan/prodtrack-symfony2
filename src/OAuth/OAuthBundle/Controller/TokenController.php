@@ -76,7 +76,7 @@ class TokenController extends Controller
         ) {
             throw new MissingMandatoryParametersException('Fields missing from request. Check documentation.');
         }
-        /** @var \Prodtrack\Bundle\Services\UserService $userService */
+        /** @var \Prodtrack\ApiBundle\Services\UserService $userService */
         $userService = $this->get('prodtrack.user_service');
         $user = $userService->getUserWithCredentials($username, $password);
         if (is_null($user)) {

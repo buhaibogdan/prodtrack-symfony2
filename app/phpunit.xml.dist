@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../src/Prodtrack/Bundle/Tests</directory>
+            <directory>../src/Prodtrack/ApiBundle/Tests</directory>
             <directory>../src/OAuth/OAuthBundle/Tests</directory>
         </testsuite>
     </testsuites>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Prodtrack\Bundle\DataFixtures\ORM;
+namespace Prodtrack\ApiBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

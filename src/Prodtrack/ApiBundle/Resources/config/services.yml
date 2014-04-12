@@ -1,0 +1,15 @@
+parameters:
+    prodtrack.user_service.class: Prodtrack\ApiBundle\Services\UserService
+    prodtrack.content_negotiator.class: Prodtrack\ApiBundle\EventListener\ContentNegotiator
+
+services:
+    prodtrack.user_service:
+        class: %prodtrack.user_service.class%
+        arguments:
+          entityManager: "@doctrine.orm.entity_manager"
+    prodtrack.content_negotiator:
+        class: %prodtrack.content_negotiator.class%
+        arguments: []
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

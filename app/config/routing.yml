@@ -6,3 +6,6 @@ activity:
     resource: "@ActivityBundle/Resources/config/routing.yml"
     prefix:   /
 
+ClientBundle:
+    resource: "@ClientBundle/Resources/config/routing.yml"
+    prefix:   /
