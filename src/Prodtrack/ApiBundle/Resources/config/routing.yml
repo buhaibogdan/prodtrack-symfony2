@@ -1,7 +1,7 @@
 activity_homepage:
-    pattern:  /
+    pattern:  /api
     defaults: { _controller: ActivityBundle:Default:index }
 
 activity_status:
-    pattern:  /status
+    pattern:  /api/status
     defaults: { _controller: ActivityBundle:Status:index}
