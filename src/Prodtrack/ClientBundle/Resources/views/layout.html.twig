@@ -1,46 +1,117 @@
-{% extends "TwigBundle::layout.html.twig" %}
+<!DOCTYPE html>
 
-{% block head %}
+<html>
+<head>
     <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/acmedemo/css/demo.css') }}" />
 
-{% endblock %}
-
-{% block title 'Work tracker' %}
-
-{% block body %}
-    {% for flashMessage in app.session.flashbag.get('notice') %}
-        <div class="flash-message">
-            <em>Notice</em>: {{ flashMessage }}
-        </div>
-    {% endfor %}
-
-    {% block content_header %}
-        <ul id="menu">
-            {% block content_header_more %}
-                <li><a href="{{ path('_demo') }}">Demo Home</a></li>
-            {% endblock %}
+    {% stylesheets
+        'bundles/client/css/main.css'
+        'bundles/client/css/bootstrap.css'
+        filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <title>Work tracker</title>
+</head>
+<body class="w-content" ng-app="WorkTrackClient">
+<div class="container">
+    <header>
+        <h1>Deep work tracker</h1>
+    </header>
+    <nav class="w-nav">
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#">Status</a></li>
+            <li><a href="#">Activities</a></li>
+            <li><a href="#">Account</a></li>
         </ul>
+    </nav>
 
-        <div style="clear: both"></div>
-    {% endblock %}
 
-    <div class="block">
-        {% block content %}{% endblock %}
+    <div ng-controller="AuthCtrl">
+        <button class="btn btn-default" ng-click="open()">Open me!</button>
+
+
     </div>
+    <footer class="w-footer">
+        <p>Work tracker by BB</p>
+    </footer>
+</div>
 
-    {% if code is defined %}
-        <h2>Code behind this page</h2>
-        <div class="block">
-            <div class="symfony-content">{{ code|raw }}</div>
+<script type="text/ng-template" id="login.html">
+    <div class="modal-header">
+        <h2>Login</h2>
+    </div>
+    <div class="modal-body">
+        <div ng-show="login">
+            <form method="POST" class="form-horizontal">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input ng-model="account.username" type="text" class="form-control" id="username" placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input ng-model="account.password" type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                </div>
+            </form>
+            <div class="text-center">
+                or
+                <a href='#' ng-click="showCreateAccount()">create an account</a>.
+            </div>
         </div>
-    {% endif %}
-    {% block javascripts %}
-        {% javascripts
-        '@ClientBundle/Resources/public/vendor/jquery/dist/jquery.js'
-        '@ClientBundle/Resources/public/vendor/angular/angular.js'
-        %}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-    {% endblock %}
+        <div ng-show="create">
+            <form method="POST" class="form-horizontal">
+                <div class="form-group">
+                    <label for="email" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8">
+                        <input ng-model="newAccount.email" type="text" class="form-control" id="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username_new" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8">
+                        <input ng-model="newAccount.username" type="text" class="form-control" id="username_new" placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password_new" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-8">
+                        <input ng-model="newAccount.password" type="password" class="form-control" id="password_new" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password_confirm" class="col-sm-4 control-label">Confirm Password</label>
+                    <div class="col-sm-8">
+                        <input ng-model="newAccount.confirmPassword" type="password" class="form-control" id="password_confirm" placeholder="Confirm password">
+                    </div>
+                </div>
+            </form>
+            <div class="text-center">
+                or
+                <a href='#' ng-click="showLogin()">login</a>.
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-show="login" class="btn btn-primary" ng-click="login()">Login</button>
+        <button ng-show="create" class="btn btn-primary" ng-click="createAccount()">Create</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+{% block javascripts %}
+    {% javascripts
+    '@ClientBundle/Resources/public/vendor/jquery/dist/jquery.js'
+    '@ClientBundle/Resources/public/vendor/angular/angular.js'
+    '@ClientBundle/Resources/public/js/app.js'
+    '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap.js'
+    '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap-tpls.js'
+    '@ClientBundle/Resources/public/js/controllers.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
+</body>
+</html>
