@@ -10,10 +10,10 @@ class AccountController extends Controller
 {
     public function loginAction(Request $request)
     {
-        var_dump($request->get('username'));
-        var_dump($request->get('password'));
+        $u = $request->request->get('username');
+        $p = $request->request->get('password');
 
-        return new Response('', 200);
+        return new Response($u . ' - ' . $p, 200);
     }
 
     public function logoutAction()
