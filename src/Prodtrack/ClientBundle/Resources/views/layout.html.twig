@@ -2,13 +2,13 @@
 
 <html>
 <head>
-    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}"/>
 
     {% stylesheets
         'bundles/client/css/main.css'
         'bundles/client/css/bootstrap.css'
         filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
     <title>Work tracker</title>
 </head>
@@ -45,14 +45,18 @@
             <form method="POST" class="form-horizontal">
                 <div class="form-group">
                     <label for="username" class="col-sm-2 control-label">Username</label>
+
                     <div class="col-sm-10">
-                        <input ng-model="account.username" type="text" class="form-control" id="username" placeholder="Username">
+                        <input ng-model="account.username" type="text" class="form-control" id="username"
+                               placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password" class="col-sm-2 control-label">Password</label>
+
                     <div class="col-sm-10">
-                        <input ng-model="account.password" type="password" class="form-control" id="password" placeholder="Password">
+                        <input ng-model="account.password" type="password" class="form-control" id="password"
+                               placeholder="Password">
                     </div>
                 </div>
             </form>
@@ -65,26 +69,34 @@
             <form method="POST" class="form-horizontal">
                 <div class="form-group">
                     <label for="email" class="col-sm-4 control-label">Email</label>
+
                     <div class="col-sm-8">
-                        <input ng-model="newAccount.email" type="text" class="form-control" id="email" placeholder="Email">
+                        <input ng-model="newAccount.email" type="text" class="form-control" id="email"
+                               placeholder="Email">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="username_new" class="col-sm-4 control-label">Username</label>
+
                     <div class="col-sm-8">
-                        <input ng-model="newAccount.username" type="text" class="form-control" id="username_new" placeholder="Username">
+                        <input ng-model="newAccount.username" type="text" class="form-control" id="username_new"
+                               placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password_new" class="col-sm-4 control-label">Password</label>
+
                     <div class="col-sm-8">
-                        <input ng-model="newAccount.password" type="password" class="form-control" id="password_new" placeholder="Password">
+                        <input ng-model="newAccount.password" type="password" class="form-control" id="password_new"
+                               placeholder="Password">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password_confirm" class="col-sm-4 control-label">Confirm Password</label>
+
                     <div class="col-sm-8">
-                        <input ng-model="newAccount.confirmPassword" type="password" class="form-control" id="password_confirm" placeholder="Confirm password">
+                        <input ng-model="newAccount.confirmPassword" type="password" class="form-control"
+                               id="password_confirm" placeholder="Confirm password">
                     </div>
                 </div>
             </form>
@@ -108,8 +120,7 @@
     '@ClientBundle/Resources/public/js/app.js'
     '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap.js'
     '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap-tpls.js'
-    '@ClientBundle/Resources/public/js/controllers.js'
-    %}
+    '@ClientBundle/Resources/public/js/controllers.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
