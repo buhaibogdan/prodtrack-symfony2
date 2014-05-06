@@ -8,19 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
 {
-    public function loginAction(Request $request)
+    public function loginAction()
     {
-        $username = $request->request->get('username');
-        $password = $request->request->get('password');
-        $clientSecret = '871c85109d7563735565d0b9c044432d3755c5c5';
-        $clientId = 'a9df6c5b72622dbea463ad1a1ba774425efc7eea';
-        $grantType = 'password';
-
-        /* @var \Prodtrack\ClientBundle\Services\AuthService $auth */
-        $auth = $this->get('client.auth');
-        $token = $auth->getToken($username, $password, $clientId, $clientSecret, $grantType);
-        var_dump($token);
-        return new Response($token, 200);
+        return new Response('login', 200);
     }
 
     public function logoutAction()

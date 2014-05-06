@@ -59,6 +59,12 @@
                                placeholder="Password">
                     </div>
                 </div>
+                <div class="form-error text-center" ng-show="accountInvalid">
+                    The username-password combination is not correct.
+                </div>
+                <div class="form-error text-center" ng-show="unknownError">
+                    Something went wrong while trying to authenticate you. Please try again later.
+                </div>
             </form>
             <div class="text-center">
                 or
@@ -118,6 +124,7 @@
     '@ClientBundle/Resources/public/vendor/jquery/dist/jquery.js'
     '@ClientBundle/Resources/public/vendor/angular/angular.js'
     '@ClientBundle/Resources/public/js/app.js'
+    '@ClientBundle/Resources/public/js/services.js'
     '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap.js'
     '@ClientBundle/Resources/public/vendor/angular-bootstrap/ui-bootstrap-tpls.js'
     '@ClientBundle/Resources/public/js/controllers.js' %}

@@ -1,29 +1,30 @@
 'use strict'
 // wtc from work track client
 var wtc = wtc || {};
-wtc.app = angular.module('WorkTrackClient', ['ui.bootstrap'], function ($httpProvider) {
+wtc.urls = {
+    'login': '/app_dev.php/oauth/token',
+    'logout': '/app_dev.php/account/logout',
+    'createAccount': '/app_dev.php/account/create'
+};
+
+wtc.app = angular.module('WorkTrackClient', ['ui.bootstrap'], ['$httpProvider', function ($httpProvider) {
     // Use x-www-form-urlencoded Content-Type
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
 
     // Override $http service's default transformRequest
     $httpProvider.defaults.transformRequest = [function (data) {
         return angular.isObject(data) &&
             String(data) !== '[object File]' ? wtc.utils.params(data) : data;
     }];
-});
+}]);
 
-wtc.app.config(function ($interpolateProvider) {
-        $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
-    }
-);
+wtc.app.config(['$interpolateProvider', function ($interpolateProvider) {
+    $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+}]);
 
-wtc.urls = {
-    'login': '/app_dev.php/account/login',
-    'logout': '/app_dev.php/account/logout',
-    'createAccount': '/app_dev.php/account/create'
-};
-
+// the wtc.utils "namespace" is used to keep useful functions|objects
+// that can be used through the entire application
+// maybe transform this into a provider
 wtc.utils = {};
 wtc.utils.params = function (obj) {
     var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
@@ -54,4 +55,11 @@ wtc.utils.params = function (obj) {
     }
 
     return query.length ? query.substr(0, query.length - 1) : query;
+};
+
+// secret stuff
+wtc.secret = {
+    id:'a9df6c5b72622dbea463ad1a1ba774425efc7eea',
+    secret:'871c85109d7563735565d0b9c044432d3755c5c5',
+    type: 'password'
 };

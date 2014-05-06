@@ -6,15 +6,19 @@ wtc.app.controller('AuthCtrl', ['$scope', '$modal', function ($scope, $modal) {
     $scope.open = function () {
         $modal.open({
             templateUrl: 'login.html',
-            controller: 'ModalInstanceCtrl'
+            controller: 'ModalInstanceCtrl',
+            backdrop: 'static'
         });
     }
 }]);
 
-wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', '$http',
-    function ($scope, $modalInstance, $http) {
+wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', '$http', 'sessionStorage',
+    function ($scope, $modalInstance, $http, sessionStorage) {
         $scope.create = false;
         $scope.login = true;
+
+        $scope.accountInvalid = false;
+        $scope.unknownError = false;
 
         $scope.account = {
             'username': '',
@@ -38,23 +42,28 @@ wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', '$http',
         };
 
         $scope.login = function () {
-            //$modalInstance.close($scope.selected.item);
-            console.log($scope.account);
+            $scope.account.client_id = wtc.secret.id;
+            $scope.account.client_secret = wtc.secret.secret;
+            $scope.account.grant_type = wtc.secret.type;
             $http({
-                    method: 'POST',
-                    url: wtc.urls.login,
-                    data: $scope.account
+                method: 'POST',
+                url: wtc.urls.login,
+                data: $scope.account
+            }).success(function (data, status, headers, config) {
+                // set headers for future requests
+                if (data.access_token) {
+                    $http.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token;
+                    // save token for the current session
+                    sessionStorage.setItem('token', data.access_token);
+                    $modalInstance.close();
+                } else {
+                    $scope.unknownError = true;
+                    $scope.accountInvalid = false;
                 }
-            ).success(function (data, status, headers, config) {
-                    // this callback will be called asynchronously
-                    // when the response is available
-                    console.log(data);
-                    console.log(headers('Content-type'));
-                }).error(function (data, status, headers, config) {
-                    // called asynchronously if an error occurs
-                    // or server returns response with an error status.
-                });
-
+            }).error(function (data, status, headers, config) {
+                $scope.accountInvalid = true;
+                $scope.unknownError = false;
+            });
         };
 
         $scope.createAccount = function () {
