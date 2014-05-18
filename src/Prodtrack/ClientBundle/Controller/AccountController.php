@@ -19,8 +19,13 @@ class AccountController extends Controller
         return new Response('Logged out', 200);
     }
 
-    public function createAction()
+    public function createAction(Request $r)
     {
+        $username = $r->request->get('username');
+        $password = $r->request->get('password');
+        $email = $r->request->get('email');
+
+
         return new Response('{created:1, error: 0}', 201, array('Content-type' => 'application/json'));
     }
 }

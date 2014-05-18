@@ -12,24 +12,16 @@ wtc.app.controller('AuthCtrl', ['$scope', '$modal', function ($scope, $modal) {
     }
 }]);
 
-wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', '$http', 'sessionStorage',
-    function ($scope, $modalInstance, $http, sessionStorage) {
+wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'AuthService',
+    function ($scope, $modalInstance, AuthService) {
         $scope.create = false;
         $scope.login = true;
 
         $scope.accountInvalid = false;
         $scope.unknownError = false;
 
-        $scope.account = {
-            'username': '',
-            'password': ''
-        };
-        $scope.newAccount = {
-            'email': '',
-            'username': '',
-            'password': '',
-            'confirmPassword': ''
-        };
+        $scope.account = AuthService.account;
+        $scope.newAccount = AuthService.newAccount;
 
         $scope.showCreateAccount = function () {
             $scope.create = true;
@@ -42,27 +34,20 @@ wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', '$http', 's
         };
 
         $scope.login = function () {
-            $scope.account.client_id = wtc.secret.id;
-            $scope.account.client_secret = wtc.secret.secret;
-            $scope.account.grant_type = wtc.secret.type;
-            $http({
-                method: 'POST',
-                url: wtc.urls.login,
-                data: $scope.account
-            }).success(function (data, status, headers, config) {
-                // set headers for future requests
-                if (data.access_token) {
-                    $http.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token;
-                    // save token for the current session
-                    sessionStorage.setItem('token', data.access_token);
-                    $modalInstance.close();
-                } else {
+            var promise = AuthService.login($scope.account.username, $scope.account.password);
+            promise.then(function(){
+                $modalInstance.close();
+            }, function(e){
+                if (e instanceof wtc.errors.InvalidCredentialsError) {
+                    console.log('invalid');
+                    $scope.unknownError = false;
+                    $scope.accountInvalid = true;
+                }
+                if (e instanceof wtc.errors.OAuthError) {
+                    console.log('oauth');
                     $scope.unknownError = true;
                     $scope.accountInvalid = false;
                 }
-            }).error(function (data, status, headers, config) {
-                $scope.accountInvalid = true;
-                $scope.unknownError = false;
             });
         };
 

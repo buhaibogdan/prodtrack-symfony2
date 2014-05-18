@@ -7,7 +7,7 @@ wtc.urls = {
     'createAccount': '/app_dev.php/account/create'
 };
 
-wtc.app = angular.module('WorkTrackClient', ['ui.bootstrap'], ['$httpProvider', function ($httpProvider) {
+wtc.app = angular.module('WorkTrackClient', ['ui.bootstrap', 'ngRoute'], ['$httpProvider', function ($httpProvider) {
     // Use x-www-form-urlencoded Content-Type
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 
@@ -18,8 +18,13 @@ wtc.app = angular.module('WorkTrackClient', ['ui.bootstrap'], ['$httpProvider', 
     }];
 }]);
 
-wtc.app.config(['$interpolateProvider', function ($interpolateProvider) {
+wtc.app.config(['$interpolateProvider', '$routeProvider', function ($interpolateProvider, $routeProvider) {
     $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+
+    $routeProvider.when('/status', {templateUrl: '/app_dev.php/status', controller: 'console'}).
+        when('/activities', {templateUrl: '/app_dev.php/activities', controller: 'console'}).
+        when('/account', {templateUrl: '/app_dev.php/account', controller: 'console'}).
+        otherwise({redirectTo:''});
 }]);
 
 // the wtc.utils "namespace" is used to keep useful functions|objects
@@ -62,4 +67,17 @@ wtc.secret = {
     id:'a9df6c5b72622dbea463ad1a1ba774425efc7eea',
     secret:'871c85109d7563735565d0b9c044432d3755c5c5',
     type: 'password'
+};
+
+wtc.errors = {};
+wtc.errors.InvalidCredentialsError = function(message){
+    this.message = message || "";
+    this.name = "InvalidCredentialsError";
+    this.stack = (new Error()).stack;
+};
+
+wtc.errors.OAuthError = function(message){
+    this.message = message || "";
+    this.name = "OAuthError";
+    this.stack = (new Error()).stack;
 };
