@@ -12,8 +12,15 @@
 }
 
 .w-nav .nav {
-    width: 250px;
+    width: 260px;
     margin: 0 auto;
+}
+.w-nav .nav .dropdown-menu {
+    background-color: #428bca;
+}
+.w-nav .dropdown-menu .submenu {
+    padding-left: 12px;
+    cursor: pointer;
 }
 
 .w-footer {

@@ -12,6 +12,14 @@ wtc.app.controller('AuthCtrl', ['$scope', '$modal', function ($scope, $modal) {
     }
 }]);
 
+wtc.app.controller('MainCtrl', ['$scope', 'AuthService', function($scope, AuthService) {
+    $scope.logout = function() {
+        if (AuthService.isLoggedIn()) {
+            AuthService.logout();
+        }
+    }
+}]);
+
 wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'AuthService',
     function ($scope, $modalInstance, AuthService) {
         $scope.create = false;
@@ -35,16 +43,14 @@ wtc.app.controller('ModalInstanceCtrl', ['$scope', '$modalInstance', 'AuthServic
 
         $scope.login = function () {
             var promise = AuthService.login($scope.account.username, $scope.account.password);
-            promise.then(function(){
+            promise.then(function () {
                 $modalInstance.close();
-            }, function(e){
+            }, function (e) {
                 if (e instanceof wtc.errors.InvalidCredentialsError) {
-                    console.log('invalid');
                     $scope.unknownError = false;
                     $scope.accountInvalid = true;
                 }
                 if (e instanceof wtc.errors.OAuthError) {
-                    console.log('oauth');
                     $scope.unknownError = true;
                     $scope.accountInvalid = false;
                 }

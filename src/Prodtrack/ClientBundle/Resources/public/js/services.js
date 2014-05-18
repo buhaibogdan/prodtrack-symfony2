@@ -10,10 +10,14 @@ wtc.app.factory('sessionStorage', ['$window', function sessionStorageDef($window
     var getItem = function (key) {
         return $window.sessionStorage.getItem(key);
     };
+    var removeItem = function(key) {
+        $window.sessionStorage.removeItem(key);
+    }
 
     return {
         setItem: setItem,
-        getItem: getItem
+        getItem: getItem,
+        removeItem: removeItem
     };
 }]);
 
@@ -93,15 +97,23 @@ wtc.app.factory('AuthService',
             if (token) {
                 $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             } else {
+                delete $http.defaults.headers.common['Authorization'];
                 authPrompt();
             }
-        }
+        };
+
+        var logout = function() {
+            sessionStorage.removeItem('token');
+            delete $http.defaults.headers.common['Authorization'];
+            // ajax request to /token/revoke for token invalidation
+        };
 
         return {
             newAccount: newAccount,
             account: account,
             prompt: authPrompt,
             login: doLogin,
+            logout: logout,
             createAccount: createAccount,
             setTokenHeader: setTokenHeader,
             isLoggedIn: isLoggedIn

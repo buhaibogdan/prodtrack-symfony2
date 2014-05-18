@@ -17,11 +17,17 @@
     <header>
         <h1>Deep work tracker</h1>
     </header>
-    <nav class="w-nav">
+    <nav class="w-nav" ng-controller="MainCtrl">
         <ul class="nav nav-pills">
             <li class="active"><a href="#">Status</a></li>
             <li><a href="#">Activities</a></li>
-            <li><a href="#">Account</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Account <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="submenu" ng-click="logout()">Logout</li>
+                </ul>
         </ul>
     </nav>
     <div ng-controller="AuthCtrl">
